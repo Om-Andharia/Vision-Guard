@@ -1,0 +1,33 @@
+VisionGuard/
+│
+├── code/
+│   ├── visionguard_main.py
+│   └── arduino_test.py
+│
+├── arduino/
+│   ├── command_mode.ino
+│   └── led_buzzer_test.ino
+│
+├── docs/
+│   ├── technical_reports/
+│   │   ├── Day_1_Report.docx
+│   │   ├── Day_2_Report.docx
+│   │   ├── Day_3_Report.docx
+│   │   ├── Day_4_Report.docx
+│   │   └── Day_5_Report.docx
+│   │
+│   └── architecture/
+│       └── phase_1_architecture.png
+│
+├── images/
+│   ├── prototype_circuit.jpg
+│   ├── complete_demo.jpg
+│   ├── tinkercad_circuit.png
+│   └── wiring_diagram.png
+│
+├── captures/
+│   └── sample_intruder_capture.jpg
+│
+├── requirements.txt
+├── README.md
+└── LICENSE

@@ -1,0 +1,17 @@
+## Project Phases
+
+### Phase 1: Arduino Uno Alert System
+- LED and buzzer alert using Arduino Uno
+- Python-to-Arduino serial communication
+- Completed successfully
+
+### Phase 2: ESP32 IoT Alert System
+- Replace/extend Arduino alert layer with ESP32
+- Add Wi-Fi-based alert capability
+- Trigger Telegram/email notification
+- Build simple web dashboard or remote status page
+
+### Phase 3: Advanced AI Features
+- Authorized vs unauthorized face recognition
+- Cloud storage for captured images
+- Night/low-light optimization
