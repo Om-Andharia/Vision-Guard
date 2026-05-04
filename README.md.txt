@@ -48,4 +48,3 @@ When motion and face detection conditions are satisfied:
 - ESP32 WiFi alert system
 - Telegram or email notifications
 - Authorized vs unauthorized face recognition
-- Cloud storage for captured images
