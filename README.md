@@ -2,6 +2,18 @@
 
 VisionGuard is an AI + Embedded Systems project that detects intruders using real-time motion detection and face detection. When an intruder is detected, Python sends a serial command to Arduino Uno, which triggers an LED and buzzer alert.
 
+## Phase 1 Status
+
+Phase 1 of VisionGuard has been completed successfully. The system detects motion and faces using Python and OpenCV, sends serial commands to Arduino Uno, and triggers LED and buzzer hardware alerts in real time.
+
+Current Phase 1 capabilities:
+- Real-time motion detection
+- Face detection using OpenCV
+- Motion memory for stable alerts
+- Arduino Uno LED and buzzer control
+- Evidence image capture with cooldown
+- Motion visualization on video feed
+
 ## Features
 
 - Real-time webcam monitoring
@@ -54,6 +66,8 @@ When motion and face detection conditions are satisfied:
 ## Working Demo
 
 ![Complete Demo](images/working_demo.jpeg)
+
+
 
 
 ## Future Scope
