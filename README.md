@@ -46,6 +46,30 @@ Current Phase 1 capabilities:
 
 Camera → Motion Detection → Face Detection → Decision Logic → Python Serial Communication → Arduino Alert
 
+## Installation
+
+pip install -r requirements.txt
+
+## Arduino Setup
+
+1. Upload `arduino/command_mode.ino` to Arduino Uno.
+2. Connect LED to pin 13.
+3. Connect active buzzer to pin 8.
+4. Select correct COM port in Arduino IDE.
+
+## Run the Project
+
+1. Connect Arduino Uno to laptop.
+2. Close Arduino Serial Monitor.
+3. Open `code/face_detection.py`.
+4. Change COM port if needed:
+   ```python
+   arduino = serial.Serial("COM3", 9600)
+5. Run
+   python code/face_detection.py
+6. Press q to exit.
+
+
 ## Output
 
 When motion and face detection conditions are satisfied:
