@@ -43,6 +43,19 @@ When motion and face detection conditions are satisfied:
 - Intruder image is saved in the `captures/` folder
 - System status changes to ALERT
 
+## Phase 1 Architecture
+
+![Phase 1 Architecture](images/phase_1_architecture.png)
+
+## Hardware Prototype
+
+![Prototype Circuit](images/prototype_circuit.jpg)
+
+## Working Demo
+
+![Complete Demo](images/complete_demo.jpg)
+
+
 ## Future Scope
 
 - ESP32 WiFi alert system
