@@ -49,7 +49,7 @@ When motion and face detection conditions are satisfied:
 
 ## Hardware Prototype
 
-![Prototype Circuit](images/TinkerCad_1.png)
+![Prototype Circuit](images/TkinderCad_1.png)
 
 ## Working Demo
 
