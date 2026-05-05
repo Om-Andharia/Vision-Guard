@@ -49,11 +49,11 @@ When motion and face detection conditions are satisfied:
 
 ## Hardware Prototype
 
-![Prototype Circuit](images/LED and Buzzer Connection with arduino.jpeg)
+![Prototype Circuit](images/TinkerCad_1.png)
 
 ## Working Demo
 
-![Complete Demo](images/complete_demo.jpg)
+![Complete Demo](images/prototype_circuit.jpeg)
 
 
 ## Future Scope
