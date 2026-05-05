@@ -49,7 +49,7 @@ When motion and face detection conditions are satisfied:
 
 ## Hardware Prototype
 
-![Prototype Circuit](images/prototype_circuit.jpg)
+![Prototype Circuit](images/LED and Buzzer Connection with arduino.jpeg)
 
 ## Working Demo
 
