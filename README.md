@@ -4,7 +4,7 @@
 
 VisionGuard Phase 2 upgrades the existing AI + Arduino intruder detection system into an **ESP32-based IoT alert system**.
 
-In Phase 1, VisionGuard successfully detected intruders using Python, OpenCV, motion detection, face detection, and Arduino Uno hardware alerts. Phase 2 focuses on replacing or extending the Arduino Uno alert layer with an **ESP32**, enabling future WiFi-based alerts, remote notifications, and IoT functionality.
+In Phase 1, VisionGuard successfully detected intruders using Python, OpenCV, motion detection, face detection, and Arduino Uno hardware alerts. Phase 2 focuses on replacing or extending the Arduino Uno alert layer with an **ESP32**, enabling WiFi-based alerts, remote notifications, and IoT functionality.
 
 ---
 
@@ -14,8 +14,8 @@ The main goal of Phase 2 is to build an ESP32-based alert system that can receiv
 
 - LED alert
 - Buzzer alert
-- Future WiFi notification
-- Future Telegram/email alert
+- Wi-Fi notification
+- Telegram/email alert
 
 ---
 
