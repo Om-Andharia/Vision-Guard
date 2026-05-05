@@ -33,6 +33,6 @@ Difference Between Phase 1 and Phase 2
 Feature	              Phase 1	            Phase 2
 Microcontroller	    Arduino Uno	        ESP32
 Alert Type	        Local LED + buzzer	Local + IoT alert
-Connectivity	      USB serial	        USB serial + WiFi
+Connectivity	    USB serial	        USB serial + WiFi
 Remote Notification	No	                Planned
 IoT Capability	    No	                Yes
