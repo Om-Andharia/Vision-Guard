@@ -22,26 +22,28 @@ The goal of Phase 2 is to allow the Python AI detection system to send alert sig
 
 ## System Flow
 
-```text
 Laptop Camera
 → Python OpenCV AI Detection
 → Motion + Face Decision Logic
 → ESP32
 → LED + Buzzer Alert
 → Future IoT Notification
-Phase 1 vs Phase 2
+
+## Phase 1 vs Phase 2
 Feature	Phase 1	Phase 2
 Microcontroller	Arduino Uno	ESP32
 Alert Type	Local LED + buzzer	Local + IoT alert
 Connectivity	USB Serial	USB Serial + WiFi
 Remote Notification	No	Planned
 IoT Capability	No	Yes
+
 Current Progress
 ✅ Phase 1 completed
 ✅ Phase 2 Day 1 completed – ESP32 setup and hardware testing
 ✅ Phase 2 Day 2 completed – WiFi foundation and status testing
 🔄 IoT notification integration pending
-Hardware Used
+
+## Hardware Used
 ESP32 WiFi + Bluetooth board
 External LED
 220Ω resistor
@@ -59,7 +61,9 @@ Component	ESP32 GPIO Pin
 LED	GPIO 23
 Buzzer	GPIO 22
 GND	Common Ground
-Day 1 Summary – ESP32 Setup
+
+
+## Day 1 Summary – ESP32 Setup
 
 On Day 1, the ESP32 foundation was prepared and tested.
 
@@ -74,7 +78,7 @@ Tested Serial Monitor command mode
 
 The LED pin was changed from GPIO 2 to GPIO 23 because GPIO 2 did not work on this ESP32 board.
 
-Day 2 Summary – WiFi Foundation
+## Day 2 Summary – WiFi Foundation
 
 On Day 2, ESP32 WiFi connectivity was tested.
 
