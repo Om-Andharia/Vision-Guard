@@ -30,12 +30,12 @@ Laptop Camera
 → Future IoT Notification
 
 ## Phase 1 vs Phase 2
-Feature	Phase 1	Phase 2
-Microcontroller	Arduino Uno	ESP32
-Alert Type	Local LED + buzzer	Local + IoT alert
-Connectivity	USB Serial	USB Serial + WiFi
-Remote Notification	No	Planned
-IoT Capability	No	Yes
+Feature	            Phase 1	            Phase 2
+Microcontroller	    Arduino Uno	        ESP32
+Alert Type	        Local LED + buzzer	Local + IoT alert
+Connectivity	      USB Serial	        USB Serial + WiFi
+Remote Notification	No	                Planned
+IoT Capability	    No	                Yes
 
 Current Progress
 ✅ Phase 1 completed
