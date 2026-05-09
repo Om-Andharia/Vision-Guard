@@ -96,3 +96,19 @@ Tested WiFi failure case using wrong password
 During WiFi connection, the LED blinked.
 After successful connection, the LED stayed ON and the buzzer beeped once.
 During failure, the buzzer beeped three times.
+
+## Day 3 Summary - ESP32 - LED and Buzzer Testing
+
+Phase 2 Day 3 focused on integrating the Python AI detection system with ESP32 using serial communication.
+
+The ESP32 was kept in Serial Command Mode, where it responds to commands received from Python through the COM port. The command ‘1’ turns ON the LED and buzzer, while the command ‘0’ turns them OFF.
+
+The pyserial library was installed and tested successfully. A separate Python serial test file was created to verify that Python could control the ESP32 directly. The test confirmed that Python was able to turn ON and OFF the ESP32-connected LED and buzzer.
+
+After successful serial testing, the ESP32 serial communication logic was added to the main OpenCV AI intruder detection code. A reusable send_to_esp32() function was created to send alert commands from Python to ESP32.
+
+The ESP32 alert was triggered only when both motion and face detection conditions were satisfied. This ensured that the alert was not activated by motion alone or face detection alone.
+
+A full system test was completed successfully. The laptop camera detected motion and face, Python confirmed the intruder condition, and ESP32 activated the LED and buzzer. When the system returned to safe condition, Python sent the OFF command and ESP32 turned off the alert.
+
+This completed the first full AI-to-ESP32 integration for VisionGuard Phase 2.
