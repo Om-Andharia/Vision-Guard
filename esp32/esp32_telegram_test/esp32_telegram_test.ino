@@ -2,16 +2,11 @@
 #include <WiFiClientSecure.h>
 #include <UniversalTelegramBot.h>
 
-// WiFi details
+const char* ssid = "YOUR_WIFI_NAME";
+const char* password = "YOUR_WIFI_PASSWORD";
 
-const char* ssid = "Nroa";
-const char* password = "nroa@072015";
-
-
-// Telegram bot details
-
-#define BOT_TOKEN "8749292030:AAFJtYp3rYeMlwTOEUjcJJma6fAcKnsKrMw"
-#define CHAT_ID "1849203854"
+#define BOT_TOKEN "YOUR_BOT_TOKEN"
+#define CHAT_ID "YOUR_CHAT_ID"
 
 WiFiClientSecure client;
 UniversalTelegramBot bot(BOT_TOKEN, client);
