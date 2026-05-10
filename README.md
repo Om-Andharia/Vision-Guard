@@ -115,21 +115,17 @@ This completed the first full AI-to-ESP32 integration for VisionGuard Phase 2.
 
 ## Day 4 Summary - IoT Notification through Telegram
 
-Phase 2 Day 4 focused on IoT notification preparation using Telegram.
+Phase 2 Day 4 was completed successfully.
 
-A Telegram bot was created using BotFather. The bot token was generated and stored privately. The Telegram Chat ID was collected using the Telegram Bot API getUpdates method.
+A Telegram bot was created using BotFather, the bot token was generated, and the Chat ID was collected using the Telegram Bot API. The required Arduino libraries, including UniversalTelegramBot and ArduinoJson, were installed.
 
-Required Arduino libraries, including UniversalTelegramBot and ArduinoJson, were installed in Arduino IDE. The ESP32 was then programmed to connect to WiFi and send a test Telegram message.
+The ESP32 successfully connected to WiFi and sent a Telegram test message. The message was received on the Telegram app, confirming that ESP32-to-Telegram communication was working.
 
-The first Telegram message was successfully received from the ESP32, confirming ESP32-to-Telegram communication through WiFi.
+LED and buzzer confirmation were added. The LED blinked during WiFi connection attempts, and after successful Telegram message delivery, the LED blinked once while the buzzer beeped once. Failure cases were also tested using a wrong WiFi password and wrong bot token. In both cases, the ESP32 handled the error condition and triggered warning beeps.
 
-LED and buzzer confirmation were added after successful Telegram message delivery. During WiFi connection, the LED blinked to show connection attempts. After the Telegram message was sent successfully, the LED blinked once and the buzzer beeped once.
+Finally, sensitive credentials such as WiFi password, Telegram bot token, and Chat ID were removed from GitHub-ready code and replaced with placeholder values.
 
-Failure cases were also tested. A wrong WiFi password was used to confirm WiFi failure handling, and an incorrect bot token was tested to verify Telegram failure handling. In failure conditions, the buzzer gave warning beeps.
-
-Finally, sensitive credentials such as WiFi password, Telegram bot token, and Chat ID were removed from the GitHub-ready code and replaced with placeholder values.
-
-This completed the Telegram notification preparation stage for VisionGuard Phase 2.
+This completes the Telegram notification preparation stage of VisionGuard Phase 2.
 
 ## Security Note
 
