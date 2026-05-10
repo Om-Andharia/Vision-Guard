@@ -112,3 +112,17 @@ The ESP32 alert was triggered only when both motion and face detection condition
 A full system test was completed successfully. The laptop camera detected motion and face, Python confirmed the intruder condition, and ESP32 activated the LED and buzzer. When the system returned to safe condition, Python sent the OFF command and ESP32 turned off the alert.
 
 This completed the first full AI-to-ESP32 integration for VisionGuard Phase 2.
+
+## Security Note
+
+This project uses WiFi credentials, Telegram Bot Token, and Telegram Chat ID for IoT notification testing.
+
+For security reasons, real credentials are not uploaded to GitHub.  
+Before running the code, replace the placeholder values with your own private credentials:
+
+```cpp
+const char* ssid = "YOUR_WIFI_NAME";
+const char* password = "YOUR_WIFI_PASSWORD";
+
+#define BOT_TOKEN "YOUR_BOT_TOKEN"
+#define CHAT_ID "YOUR_CHAT_ID"
