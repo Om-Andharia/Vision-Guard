@@ -3,8 +3,8 @@
 #define LED_PIN 23
 #define BUZZER_PIN 22
 
-const char* ssid = "Nroa";
-const char* password = "nroa@072015";
+const char* ssid = "YOUR_WIFI_NAME";
+const char* password = "YOUR_WIFI_PASSWORD";
 
 void setup() {
   Serial.begin(9600);
