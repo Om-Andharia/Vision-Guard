@@ -5,11 +5,11 @@
 #define LED_PIN 23
 #define BUZZER_PIN 22
 
-const char* ssid = "Nroa";
-const char* password = "nroa@072015";
+const char* ssid = "YOUR_WIFI_NAME";
+const char* password = "YOUR_WIFI_PASSWORD";
 
-#define BOT_TOKEN "8749292030:AAFJtYp3rYeMlwTOEUjcJJma6fAcKnsKrMw"
-#define CHAT_ID "1849203854"
+#define BOT_TOKEN "YOUR_BOT_TOKEN"
+#define CHAT_ID "YOUR_CHAT_ID"
 
 WiFiClientSecure client;
 UniversalTelegramBot bot(BOT_TOKEN, client);
