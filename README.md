@@ -127,6 +127,22 @@ Finally, sensitive credentials such as WiFi password, Telegram bot token, and Ch
 
 This completes the Telegram notification preparation stage of VisionGuard Phase 2.
 
+## Day 5 Summary - Python + Telegram IoT Notification
+
+Phase 2 Day 5 focused on full integration between Python AI detection, ESP32 hardware alerting, and Telegram IoT notification.
+
+Phase 2 Day 5 was completed successfully.
+
+The Python OpenCV AI detection system was connected with the ESP32 through Serial communication. The ESP32 was programmed to receive commands from Python and perform both local and remote alert actions.
+
+When Python detected both motion and face, it sent command 1 to the ESP32. The ESP32 then activated the LED and buzzer and sent a Telegram alert message. When the system returned to safe condition, Python sent command 0, and the ESP32 turned OFF the LED and buzzer.
+
+During testing, repeated Telegram alerts were observed when movement continued or restarted. To solve this, a 15-second Telegram cooldown was added using lastTelegramTime and telegramCooldown. This prevented alert spam while still allowing new alerts after the cooldown period.
+
+Private details such as WiFi password, Telegram Bot Token, and Chat ID were removed from GitHub-ready code and replaced with placeholders.
+
+This completed the full AI + ESP32 + Telegram IoT integration for VisionGuard Phase 2.
+
 ## Security Note
 
 This project uses WiFi credentials, Telegram Bot Token, and Telegram Chat ID for IoT notification testing.
