@@ -145,6 +145,7 @@ This completed the full AI + ESP32 + Telegram IoT integration for VisionGuard Ph
 
 ## Current System Architecture
 
+```text
 Laptop Camera
       ↓
 Python OpenCV
@@ -162,6 +163,7 @@ LED + Buzzer Alert
 WiFi
       ↓
 Telegram Notification
+```
 
 ## Security Note
 
