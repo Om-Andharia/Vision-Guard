@@ -156,11 +156,11 @@ Intruder Decision Logic
       ↓
 Python Serial Command
       ↓
-ESP32
+    ESP32
       ↓
 LED + Buzzer Alert
       ↓
-WiFi
+    WiFi
       ↓
 Telegram Notification
 ```
