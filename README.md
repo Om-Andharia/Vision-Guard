@@ -143,6 +143,26 @@ Private details such as WiFi password, Telegram Bot Token, and Chat ID were remo
 
 This completed the full AI + ESP32 + Telegram IoT integration for VisionGuard Phase 2.
 
+## Current System Architecture
+
+Laptop Camera
+      ↓
+Python OpenCV
+      ↓
+Motion Detection + Face Detection
+      ↓
+Intruder Decision Logic
+      ↓
+Python Serial Command
+      ↓
+ESP32
+      ↓
+LED + Buzzer Alert
+      ↓
+WiFi
+      ↓
+Telegram Notification
+
 ## Security Note
 
 This project uses WiFi credentials, Telegram Bot Token, and Telegram Chat ID for IoT notification testing.
