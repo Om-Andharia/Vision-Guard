@@ -394,7 +394,10 @@ VisionGuard-Phase-2-ESP32-IoT-Alert-System/
 │   └── esp32_test.ino
 │
 ├── images/
+│   └── Phase_2_Architecture.png
+│   └── VisionGuard_Bot_Demo.png
 │   └── esp32_led_and_buzzer.jpeg
+│   └── telegram_alert_received.jpeg
 │
 ├── README.md
 ├── esp32_serial_test.py
