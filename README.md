@@ -1,6 +1,6 @@
-# VisionGuard – AI Intruder Detection System
+# VisionGuard – Intruder Detection System
 
-VisionGuard is an AI + Embedded Systems + IoT project that detects intruders using real-time motion detection and face detection. In Phase 1, alerts were triggered using Arduino Uno. In Phase 2, the system was upgraded with ESP32, WiFi connectivity, LED and buzzer alerts, and Telegram IoT notification.
+VisionGuard is an OpenCV + Embedded Systems + IoT project that detects intruders using real-time motion detection and face detection. In Phase 1, alerts were triggered using Arduino Uno. In Phase 2, the system was upgraded with ESP32, WiFi connectivity, LED and buzzer alerts, and Telegram IoT notification.
 
 ## Phase 1 Status
 
@@ -239,7 +239,7 @@ const char* password = "YOUR_WIFI_PASSWORD";
 
 ### Phase 2 Architecture
 
-![Phase 2 Architecture](images/phase_2_images/phase_2_architecture.png)
+![Phase 2 Architecture](images/phase_2_images/Phase_2_Architecture.png)
 
 ### ESP32 LED and Buzzer Setup
 
