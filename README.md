@@ -92,7 +92,63 @@ When motion and face detection conditions are satisfied:
 ![Complete Demo](images/working_demo.jpeg)
 
 
+# Phase 2 – ESP32 IoT Alert System
 
+## Phase 2 Status
+
+Phase 2 of VisionGuard has been completed successfully. The system has been upgraded from an Arduino Uno local alert system to an ESP32-based IoT alert system with Telegram notification support.
+
+Current Phase 2 capabilities:
+
+- ESP32 hardware alert integration
+- LED alert on GPIO 23
+- Buzzer alert on GPIO 22
+- Python-to-ESP32 serial communication
+- ESP32 WiFi connectivity
+- Telegram bot notification
+- 15-second Telegram cooldown to prevent alert spam
+- Camera blocked / too dark detection
+- ESP32 disconnection handling
+- Safe shutdown handling
+- GitHub-safe credential placeholders
+
+---
+
+## Phase 1 vs Phase 2
+
+| Feature             | Phase 1            | Phase 2                     |
+| ------------------- | ------------------ | --------------------------- |
+| Microcontroller     | Arduino Uno        | ESP32                       |
+| Alert Type          | Local LED + Buzzer | Local + IoT Alert           |
+| Connectivity        | USB Serial         | USB Serial + WiFi           |
+| Remote Notification | No                 | Telegram Notification       |
+| IoT Capability      | No                 | Yes                         |
+| Anti-Spam Logic     | No                 | 15-second Telegram cooldown |
+| Failure Handling    | Basic              | Improved                    |
+
+---
+
+## Phase 2 System Architecture
+
+```text
+Laptop Camera
+      ↓
+Python OpenCV
+      ↓
+Motion Detection + Face Detection
+      ↓
+Intruder Decision Logic
+      ↓
+Python Serial Command
+      ↓
+ESP32
+      ↓
+LED + Buzzer Alert
+      ↓
+WiFi
+      ↓
+Telegram Notification
+```
 
 ```markdown
 ## Future Scope
