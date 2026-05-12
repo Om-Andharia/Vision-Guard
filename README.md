@@ -2,6 +2,13 @@
 
 VisionGuard is an OpenCV + Embedded Systems + IoT project that detects intruders using real-time motion detection and face detection. In Phase 1, alerts were triggered using Arduino Uno. In Phase 2, the system was upgraded with ESP32, WiFi connectivity, LED and buzzer alerts, and Telegram IoT notification.
 
+## Branches
+
+| Branch | Description |
+| ------ | ----------- |
+| `main` | Phase 1 – AI + Arduino local alert system |
+| `phase-2` | Phase 2 – ESP32 IoT alert system with Telegram notification |
+
 ## Phase 1 Status
 
 Phase 1 of VisionGuard has been completed successfully. The system detects motion and faces using Python and OpenCV, sends serial commands to Arduino Uno, and triggers LED and buzzer hardware alerts in real time.
