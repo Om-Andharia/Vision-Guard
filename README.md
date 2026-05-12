@@ -167,6 +167,10 @@ The ESP32 alert was triggered only when:
 ```text
 Motion Detected + Face Detected = Intruder Confirmed
 ```
+### Python Terminal Output
+
+![Python Terminal Output](images/terminal_output.png)
+
 ## Day 4 Summary – IoT Notification through Telegram
 
 On **Day 4**, IoT notification through Telegram was prepared and tested.
