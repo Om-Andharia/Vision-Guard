@@ -150,6 +150,12 @@ WiFi
 Telegram Notification
 ```
 
+
+
+## ESP32 LED and Buzzer Setup
+
+![ESP32 LED and Buzzer Setup](phase2/images/esp32_led_and_buzzer.jpeg)
+
 ```markdown
 ## Future Scope
 
