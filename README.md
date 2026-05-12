@@ -50,6 +50,7 @@ Telegram / Future IoT Notification
 | Failure Handling    | Basic              | Improved                    |
 
 ## Phase - 2 Daywise 
+```text
 ✅ Phase 1 completed
 ✅ Phase 2 Day 1 completed – ESP32 setup and hardware testing
 ✅ Phase 2 Day 2 completed – WiFi foundation and status testing
@@ -57,6 +58,7 @@ Telegram / Future IoT Notification
 ✅ Phase 2 Day 4 completed – ESP32 Telegram notification testing
 ✅ Phase 2 Day 5 completed – Full AI + ESP32 + Telegram integration
 ✅ Phase 2 Day 6 completed – Final testing, reliability, and documentation
+```
 
 ## Hardware Used
 
