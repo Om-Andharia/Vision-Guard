@@ -30,7 +30,7 @@ Python OpenCV AI Detection
       ↓
 Motion + Face Decision Logic
       ↓
-ESP32
+    ESP32
       ↓
 LED + Buzzer Alert
       ↓
