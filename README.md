@@ -94,8 +94,14 @@ When motion and face detection conditions are satisfied:
 
 
 
+```markdown
 ## Future Scope
 
-- ESP32 WiFi alert system
-- Telegram or email notifications
-- Authorized vs unauthorized face recognition
+- Send captured intruder image through Telegram
+- Add timestamp and location to Telegram alerts
+- Add authorized vs unauthorized face recognition
+- Add WiFi reconnection logic
+- Add event logging file for alert history
+- Improve face detection using DNN, MediaPipe, or YOLO
+- Build a simple dashboard for live system status
+```
