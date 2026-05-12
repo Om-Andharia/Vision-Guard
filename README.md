@@ -235,9 +235,19 @@ const char* password = "YOUR_WIFI_PASSWORD";
 #define CHAT_ID "YOUR_CHAT_ID"
 ```
 
-## ESP32 LED and Buzzer Setup
+## Phase 2 Project Images
 
-![ESP32 LED and Buzzer Setup](phase2/images/esp32_led_and_buzzer.jpeg)
+### Phase 2 Architecture
+
+![Phase 2 Architecture](images/phase_2_architecture.png)
+
+### ESP32 LED and Buzzer Setup
+
+![ESP32 LED and Buzzer Setup](images/esp32_led_and_buzzer.jpeg)
+
+### Telegram Alert Received
+
+![Telegram Alert Received](images/telegram_alert_received.jpeg)
 
 ```markdown
 ## Future Scope - Phase 3
