@@ -150,14 +150,69 @@ WiFi
 Telegram Notification
 ```
 
+## Phase 2 Hardware Used
 
+- ESP32 WiFi + Bluetooth board
+- External LED
+- 220Ω resistor
+- Active buzzer
+- Breadboard
+- Jumper wires
+- USB cable
+- Laptop webcam
+
+---
+
+## Phase 2 Software Used
+
+- Python
+- OpenCV
+- PySerial
+- Arduino IDE
+- ESP32 board support package
+- `WiFi.h`
+- `WiFiClientSecure.h`
+- `UniversalTelegramBot`
+- `ArduinoJson`
+- Telegram Bot API
+- Silicon Labs USB to UART Bridge VCP driver
+
+---
+
+## Phase 2 Final Pin Configuration
+
+| Component | ESP32 GPIO Pin |
+| --------- | -------------- |
+| LED       | GPIO 23        |
+| Buzzer    | GPIO 22        |
+| GND       | Common Ground  |
+
+---
+
+## Phase 2 Output
+
+When motion and face detection conditions are satisfied:
+
+- Python sends command `1` to ESP32
+- ESP32 turns ON LED
+- ESP32 turns ON buzzer
+- ESP32 sends Telegram alert
+- Intruder image is saved in the `captures/` folder
+- System status changes to `ALERT`
+
+When the system becomes safe:
+
+- Python sends command `0` to ESP32
+- ESP32 turns OFF LED
+- ESP32 turns OFF buzzer
+- System becomes ready for the next alert
 
 ## ESP32 LED and Buzzer Setup
 
 ![ESP32 LED and Buzzer Setup](phase2/images/esp32_led_and_buzzer.jpeg)
 
 ```markdown
-## Future Scope
+## Future Scope - Phase 3
 
 - Send captured intruder image through Telegram
 - Add timestamp and location to Telegram alerts
