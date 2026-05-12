@@ -273,19 +273,19 @@ The full AI + ESP32 + Telegram IoT integration was completed successfully.
 
 On Day 6, the complete VisionGuard Phase 2 system was re-tested, improved, cleaned, and documented.
 
-Completed Work
-Re-tested the full system pipeline
-Verified the 15-second Telegram cooldown
-Tested important failure cases
-Improved ESP32 disconnection handling
-Added camera-not-detected handling
-Added first-frame camera validation
-Added camera blocked / too dark detection
-Added camera restored handling
-Cleaned Python and ESP32 code
-Added comments throughout the code
-Updated README documentation
-Checked GitHub safety before upload
+### Completed Work
+- Re-tested the full system pipeline
+- Verified the 15-second Telegram cooldown
+- Tested important failure cases
+- Improved ESP32 disconnection handling
+- Added camera-not-detected handling
+- Added first-frame camera validation
+- Added camera blocked / too dark detection
+- Added camera restored handling
+- Cleaned Python and ESP32 code
+- Added comments throughout the code
+- Updated README documentation
+- Checked GitHub safety before upload
 
 ## Phase 2 Architecture
 
