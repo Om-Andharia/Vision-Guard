@@ -1,33 +1,37 @@
+## Project Folder Structure
+
+```text
 VisionGuard/
 │
-├── code/
-│   ├── visionguard_main.py
-│   └── arduino_test.py
+├── .idea/
+│
+├── VisionGuard/
 │
 ├── arduino/
-│   ├── command_mode.ino
-│   └── led_buzzer_test.ino
+│   └── command_mode.ino/
+│       └── command_mode.ino
 │
 ├── docs/
-│   ├── technical_reports/
-│   │   ├── Day_1_Report.docx
-│   │   ├── Day_2_Report.docx
-│   │   ├── Day_3_Report.docx
-│   │   ├── Day_4_Report.docx
-│   │   └── Day_5_Report.docx
-│   │
-│   └── architecture/
-│       └── phase_1_architecture.png
+│   ├── Documentation.docx
+│   ├── Phase_2_Roadmap.md
+│   ├── Project.txt
+│   └── Technical Report.docx
 │
 ├── images/
-│   ├── prototype_circuit.jpg
-│   ├── complete_demo.jpg
-│   ├── tinkercad_circuit.png
-│   └── wiring_diagram.png
+│   ├── phase_2_images/
+│   ├── Real Time Simulation.mp4
+│   ├── TkinderCad_1.png
+│   ├── Top View_1.jpeg
+│   ├── Top View_2.jpeg
+│   ├── phase_1_architecture.png
+│   ├── prototype_circuit.jpeg
+│   └── working_demo.jpeg
 │
-├── captures/
-│   └── sample_intruder_capture.jpg
-│
-├── requirements.txt
+├── .gitignore.txt
+├── Github Structure.txt
 ├── README.md
-└── LICENSE
+├── README.md.txt
+├── arduino_test.py
+├── camera_test.py
+├── face_detection.py
+└── requirements.txt
