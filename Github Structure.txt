@@ -19,6 +19,11 @@ VisionGuard/
 │
 ├── images/
 │   ├── phase_2_images/
+│   │   ├── Phase_2_Architecture.png
+│   │   ├── VisionGuard_Bot_Demo.png
+│   │   ├── esp32_led_and_buzzer.jpeg
+│   │   └── telegram_alert_received.jpeg
+│   │
 │   ├── Real Time Simulation.mp4
 │   ├── TkinderCad_1.png
 │   ├── Top View_1.jpeg
