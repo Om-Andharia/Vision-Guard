@@ -1,39 +1,34 @@
 # ============================================================
 # 🛡️ VisionGuard Phase 2
 #    AI Intruder Detection System
-#    Motion Detection + Motion Area Visualization
-#    Face Detection + ESP32 Alert
+#    Motion Detection + Face Detection + ESP32 Alert
 # ============================================================
 #
-# This project combines:
+# This project uses a laptop webcam and Python OpenCV to detect
+# possible intruders.
 #
-#   1. Computer Vision using OpenCV
-#      - Uses webcam feed.
-#      - Detects motion.
-#      - Detects human faces.
+# The system checks two things:
 #
-#   2. ESP32 Hardware Alert System
-#      - Python sends signal to ESP32 through USB Serial.
-#      - ESP32 can control LED and buzzer.
+#   1. Motion
+#      - Is something moving in front of the camera?
 #
-#   3. Smart Alert Logic
-#      - Alert is triggered only when motion and face are both detected.
+#   2. Face
+#      - Is a human face visible?
 #
-# Intruder Alert Condition:
+# The system sends an alert to ESP32 only when BOTH conditions are true:
 #
-#   ALERT happens only when:
+#       Motion detected + Face detected = Intruder Alert
 #
-#       recent_motion == True
-#       AND
-#       at least one face is detected
+# ESP32 then controls external hardware such as:
+#   - LED
+#   - Buzzer
 #
-# Why this logic is powerful:
+# This code also includes safety handling for:
+#   - ESP32 not connected
+#   - ESP32 disconnected during runtime
+#   - Camera not detected
+#   - Camera blocked or too dark
 #
-#   - Motion alone may be caused by light, shadow, fan, curtain, etc.
-#   - Face alone may be detected from a photo or screen.
-#   - Motion + Face gives a more reliable intruder condition.
-#
-# This code is part of the ESP32-based IoT upgrade of VisionGuard.
 # ============================================================
 
 
@@ -42,87 +37,86 @@
 # ------------------------------------------------------------
 
 import os.path
-# Used to check whether folders exist.
-# Here, it checks whether the "captures" folder exists.
+# Used for checking whether a folder exists.
+# Example:
+#   We check if the "captures" folder exists before saving images.
 
 import cv2
 # OpenCV library.
 # Used for:
-#   - accessing webcam
+#   - opening webcam
 #   - reading video frames
-#   - converting images to grayscale
-#   - detecting motion
-#   - detecting faces
-#   - drawing text and rectangles
-#   - displaying live output window
+#   - image processing
+#   - motion detection
+#   - face detection
+#   - drawing text and rectangles on screen
 
-import winsound
-# Used for sound alerts on Windows.
-# In this version, the beep is commented because ESP32 buzzer is used.
+# import winsound
+# winsound is used for playing beep sounds on Windows.
+# It is commented because this version uses ESP32 buzzer instead.
 
 import time
 # Used for:
+#   - delay after connecting ESP32
 #   - cooldown timing
 #   - motion memory timing
-#   - ESP32 startup delay
 
 import serial
-# Used for USB Serial communication.
-# Python uses this to send commands to ESP32.
+# Used for USB serial communication between Python and ESP32.
+# Python sends '1' or '0' to ESP32 through this library.
 
 
 # ------------------------------------------------------------
 # 🔌 ESP32 Serial Configuration
 # ------------------------------------------------------------
-#
-# ESP32_PORT:
-#   This is the COM port where ESP32 is connected.
-#
-#   Example:
-#       COM3, COM4, COM5, etc.
-#
-#   In this project, ESP32 is connected on COM4.
-#
-# BAUD_RATE:
-#   Speed of serial communication.
-#
-#   This must match the ESP32 Arduino code:
-#
-#       Serial.begin(9600);
-#
-# If Python uses 9600 but ESP32 uses another baud rate,
-# communication will not work correctly.
 
 ESP32_PORT = "COM4"
+# This is the COM port where ESP32 is connected.
+#
+# On Windows, ESP32 usually appears as:
+#   COM3, COM4, COM5, etc.
+#
+# If your ESP32 is connected to another port,
+# change this value.
+
 BAUD_RATE = 9600
+# Baud rate means communication speed.
+#
+# This value must match the ESP32 code:
+#
+#   Serial.begin(9600);
+#
+# If Python and ESP32 use different baud rates,
+# communication will not work properly.
 
 
 # ------------------------------------------------------------
 # 🔌 Connect Python Program to ESP32
 # ------------------------------------------------------------
 #
-# We use try-except here because ESP32 may not always be connected.
+# We use try-except because ESP32 may not always be connected.
 #
 # Without try-except:
-#   If ESP32 is unplugged or COM port is wrong,
-#   the program will crash immediately.
+#   If ESP32 is unplugged, Python will crash.
 #
 # With try-except:
-#   The program continues running.
-#   Camera and AI detection still work.
-#   Only ESP32 alert is skipped.
+#   Python continues running.
+#   Camera detection still works.
+#   Only hardware alert is skipped.
 
 try:
     esp32 = serial.Serial(ESP32_PORT, BAUD_RATE, timeout=1)
 
-    # When serial connection starts, ESP32 may reset.
-    # This delay gives ESP32 time to restart and become ready.
+    # ESP32 may restart when serial connection opens.
+    # So we wait 2 seconds to let ESP32 become ready.
     time.sleep(2)
+
+    print("ESP32 connected successfully.")
 
 except Exception as e:
     esp32 = None
 
-    # If connection fails, show the error clearly.
+    # If ESP32 connection fails, show the reason clearly.
     print("ESP32 connection failed:", e)
 
 
@@ -130,36 +124,45 @@ except Exception as e:
 # 🔌 Function: Send Signal to ESP32
 # ------------------------------------------------------------
 #
-# This function sends alert commands from Python to ESP32.
+# This function sends alert commands to ESP32.
 #
 # signal = 1:
-#   Python sends byte '1' to ESP32.
+#   Send ON command to ESP32.
 #   ESP32 should turn ON LED and buzzer.
 #
 # signal = 0:
-#   Python sends byte '0' to ESP32.
+#   Send OFF command to ESP32.
 #   ESP32 should turn OFF LED and buzzer.
 #
-# Important:
+# Why b'1' and b'0'?
 #   Serial communication sends bytes.
-#   That is why we use b'1' and b'0'.
+#   So we send byte values, not normal strings.
 
 def send_to_esp32(signal):
+    global esp32
 
     # First check whether ESP32 is connected.
     if esp32 is not None:
 
-        if signal == 1:
-            esp32.write(b'1')
-            print("ESP32 Alert ON")
+        try:
+            if signal == 1:
+                esp32.write(b'1')
+                print("ESP32 Alert ON")
 
-        else:
-            esp32.write(b'0')
-            print("ESP32 Alert OFF")
+            else:
+                esp32.write(b'0')
+                print("ESP32 Alert OFF")
+
+        except Exception as e:
+            # This block runs if ESP32 disconnects while the program is running.
+            print("ESP32 disconnected or write failed:", e)
+
+            # Mark ESP32 as unavailable so future alerts are skipped safely.
+            esp32 = None
 
     else:
-        # If ESP32 is not connected, do not crash the program.
-        # Just print a message and skip hardware alert.
+        # If ESP32 is not connected, do not crash.
+        # Only print message and continue AI detection.
         print("ESP32 not connected. Alert skipped.")
 
 
@@ -167,22 +170,20 @@ def send_to_esp32(signal):
 # 📁 Create Folder for Captured Images
 # ------------------------------------------------------------
 #
-# Whenever an intruder is detected, the system saves a frame.
-# These captured images are stored inside the "captures" folder.
+# Intruder images will be saved inside the "captures" folder.
 #
-# If the folder does not already exist, this code creates it.
-# This prevents errors while saving images.
+# If the folder does not exist, create it automatically.
 
 if not os.path.exists("captures"):
     os.makedirs("captures")
 
 
 # ------------------------------------------------------------
-# 🔢 Initialize System Variables
+# 🔢 Initialize Important Variables
 # ------------------------------------------------------------
 
 image_count = 0
-# Used for unique image filenames.
+# Used to create unique image names.
 #
 # Example:
 #   captures/intruder_0.jpg
@@ -190,64 +191,62 @@ image_count = 0
 #   captures/intruder_2.jpg
 
 last_capture_time = 0
-# Stores the timestamp of the last saved intruder image.
+# Stores the time when the last intruder image was saved.
 
 cooldown = 5
-# Minimum time gap between two saved images.
+# Minimum time gap between saving two images.
 #
 # Why cooldown is needed:
 #   Without cooldown, the system may save many images every second.
-#   This creates duplicate images and wastes storage.
+#   That would waste storage and create duplicate images.
 
 system_active = False
 # Tracks whether ESP32 alert is currently ON or OFF.
 #
 # False:
-#   ESP32 alert is OFF.
+#   Alert is OFF.
 #
 # True:
-#   ESP32 alert is ON.
+#   Alert is ON.
 #
 # Why this is important:
 #   The webcam loop runs many times per second.
-#   Without system_active, Python would send repeated ON commands
+#   Without this variable, Python would repeatedly send ON commands
 #   to ESP32 again and again.
 
 last_motion_time = 0
-# Stores the last time real motion was detected.
+# Stores the most recent time when motion was detected.
 
 motion_hold_time = 2
-# Motion memory duration in seconds.
-#
-# Example:
-#   If motion is detected now,
-#   recent_motion remains True for 2 seconds.
+# Keeps motion active for 2 seconds after detection.
 #
 # Why this helps:
-#   Sometimes motion briefly disappears for a moment.
-#   This prevents alert flickering ON/OFF too quickly.
+#   Motion detection can flicker.
+#   A person may stop moving for a moment.
+#   This prevents alert from turning ON/OFF too quickly.
+
+was_camera_blocked = False
+# Stores whether the camera was previously blocked or too dark.
+#
+# This is useful because when the camera becomes visible again,
+# we reset the motion baseline to avoid false motion alerts.
 
 
 # ------------------------------------------------------------
 # 🧠 STEP 1: Load Face Detection Model
 # ------------------------------------------------------------
 #
-# Haar Cascade is a pre-trained OpenCV model for face detection.
-#
-# It detects face-like patterns such as:
-#   - eyes
-#   - nose bridge
-#   - forehead area
-#   - overall face structure
+# Haar Cascade is a pre-trained OpenCV model.
+# It detects human faces in an image.
 #
 # Important:
 #   This is face detection, not face recognition.
 #
-# Face detection:
+# Face detection means:
 #   "A face is present."
 #
-# Face recognition:
-#   "This face belongs to a specific person."
+# Face recognition means:
+#   "This face belongs to Omi or another known person."
 
 face_cascade = cv2.CascadeClassifier(
     cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
@@ -258,25 +257,86 @@ face_cascade = cv2.CascadeClassifier(
 # 📷 STEP 2: Start Webcam
 # ------------------------------------------------------------
 #
-# 0 means default webcam.
-# On most laptops, this opens the built-in camera.
-# If an external webcam is used, the value may need to be changed to 1.
+# cv2.VideoCapture(0) opens the default webcam.
+#
+# 0 usually means:
+#   laptop built-in camera
+#
+# If using external camera, sometimes you may need:
+#   cv2.VideoCapture(1)
 
 cap = cv2.VideoCapture(0)
+
+
+# ------------------------------------------------------------
+# ✅ Check Whether Camera Opened Successfully
+# ------------------------------------------------------------
+#
+# cap.isOpened() checks if OpenCV successfully opened the camera.
+#
+# If camera is not available:
+#   - show clear message
+#   - turn ESP32 alert OFF
+#   - close ESP32 safely
+#   - exit program
+
+if not cap.isOpened():
+    print("Camera not detected or cannot be opened.")
+    print("Please check camera permission, webcam connection, or camera index.")
+
+    send_to_esp32(0)
+
+    if esp32 is not None:
+        try:
+            esp32.close()
+        except Exception as e:
+            print("ESP32 close failed:", e)
+
+    exit()
 
 
 # ------------------------------------------------------------
 # 🖼️ Capture First Frame for Motion Detection
 # ------------------------------------------------------------
 #
-# Motion detection compares:
-#   previous frame
-#   current frame
+# Motion detection needs two frames:
 #
-# Before the loop starts, we capture one frame and store it as prev_frame.
-# This becomes the first reference frame.
+#   1. Previous frame
+#   2. Current frame
+#
+# Before starting the loop, we capture the first frame.
+# This becomes the first previous frame.
 
 ret, prev_frame = cap.read()
+
+
+# ------------------------------------------------------------
+# ✅ Check Whether First Frame Was Captured
+# ------------------------------------------------------------
+#
+# Sometimes camera opens, but frame is not received.
+# This can happen if:
+#   - camera is blocked
+#   - camera is disabled
+#   - camera is being used by another app
+#   - permission issue exists
+
+if not ret or prev_frame is None:
+    print("Camera opened, but first frame could not be captured.")
+    print("Please check if the camera is blocked, used by another app, or disabled.")
+
+    cap.release()
+    cv2.destroyAllWindows()
+
+    send_to_esp32(0)
+
+    if esp32 is not None:
+        try:
+            esp32.close()
+        except Exception as e:
+            print("ESP32 close failed:", e)
+
+    exit()
 
 
 # ------------------------------------------------------------
@@ -285,13 +345,13 @@ ret, prev_frame = cap.read()
 #
 # This loop continuously:
 #   - captures webcam frames
+#   - checks if camera is blocked
 #   - detects motion
-#   - draws motion area
-#   - detects faces
+#   - detects face
 #   - decides SAFE or ALERT
 #   - sends command to ESP32
-#   - saves intruder images
-#   - displays live output
+#   - saves intruder image
+#   - displays output window
 #
 # The loop ends when:
 #   - camera fails
@@ -302,30 +362,145 @@ while True:
     # Capture current webcam frame.
     ret, frame = cap.read()
 
-    # If camera frame is not received, stop safely.
-    if not ret:
-        print("Camera not detected. Please check webcam connection.")
+    # If frame is not received, stop safely.
+    if not ret or frame is None:
+        print("Camera frame not received. Please check webcam connection.")
 
         cap.release()
         cv2.destroyAllWindows()
 
+        send_to_esp32(0)
+
         if esp32 is not None:
-            esp32.close()
+            try:
+                esp32.close()
+            except Exception as e:
+                print("ESP32 close failed:", e)
 
         exit()
+
+
+    # --------------------------------------------------------
+    # 🚫 Camera Blocked / Too Dark Detection
+    # --------------------------------------------------------
+    #
+    # Important point:
+    #   Even if the camera is blocked, OpenCV may still receive frames.
+    #
+    # Example:
+    #   If you cover the webcam with your hand or tape,
+    #   OpenCV still gets a black/dark image.
+    #
+    # So ret may still be True.
+    # That is why we check brightness separately.
+
+    gray_check = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+    # Convert frame to grayscale because brightness is easier to measure
+    # in a single-channel gray image.
+
+    average_brightness = cv2.mean(gray_check)[0]
+
+    # cv2.mean(gray_check)[0] gives average brightness.
+    #
+    # Very low brightness means:
+    #   camera may be blocked
+    #   or room may be too dark.
+
+    camera_blocked = average_brightness < 10
+
+    # If average brightness is below 10,
+    # treat it as camera blocked or too dark.
+    #
+    # You can tune this value:
+    #   Increase it if camera block is not detected.
+    #   Decrease it if dark room is wrongly treated as blocked.
+
+
+    if camera_blocked:
+        print("Camera may be blocked or too dark.")
+
+        was_camera_blocked = True
+
+        # If alert was ON, turn it OFF immediately.
+        if system_active:
+            send_to_esp32(0)
+            system_active = False
+
+        # Display warning directly on camera output window.
+        cv2.putText(
+            frame,
+            "CAMERA BLOCKED / TOO DARK",
+            (10, 150),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.8,
+            (0, 0, 255),
+            2
+        )
+
+        cv2.imshow("Face Detection", frame)
+
+        # Update previous frame so the blocked frame does not create
+        # strange motion behavior later.
+        prev_frame = frame.copy()
+
+        # Allow user to exit even while camera is blocked.
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+
+        # Skip the rest of the loop.
+        # No motion detection, no face detection, no alert.
+        continue
+
+
+    # --------------------------------------------------------
+    # ✅ Camera Restored Handling
+    # --------------------------------------------------------
+    #
+    # If camera was blocked earlier and is now visible again,
+    # we reset the motion baseline.
+    #
+    # Why?
+    #   The first visible frame after blockage may look very different
+    #   from the blocked frame.
+    #   Without reset, it may create a false motion alert.
+
+    if was_camera_blocked:
+        print("Camera view restored. Resetting motion baseline.")
+
+        was_camera_blocked = False
+        prev_frame = frame.copy()
+
+        cv2.putText(
+            frame,
+            "CAMERA RESTORED",
+            (10, 150),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.8,
+            (0, 255, 0),
+            2
+        )
+
+        cv2.imshow("Face Detection", frame)
+
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+
+        # Skip this one frame after restore.
+        # Next frame will use a clean baseline.
+        continue
 
 
     # --------------------------------------------------------
     # 🎨 STEP 4: Motion Detection using Frame Difference
     # --------------------------------------------------------
     #
-    # Basic idea:
+    # Motion detection idea:
     #
     #   If previous frame and current frame are different,
     #   something has moved.
     #
     # We compare:
-    #
     #   prev_frame  → old frame
     #   frame       → current frame
 
@@ -335,8 +510,8 @@ while True:
     # Convert both frames to grayscale.
     #
     # Why grayscale?
-    #   Motion detection does not need color information.
-    #   Grayscale makes processing faster and simpler.
+    #   Motion detection does not need color.
+    #   Grayscale is faster and simpler.
 
 
     prev_gray = cv2.GaussianBlur(prev_gray, (9, 9), 0)
@@ -345,51 +520,51 @@ while True:
     # Gaussian blur smooths the image.
     #
     # Why blur is useful:
-    #   Camera noise and small light changes can create false motion.
-    #   Blur reduces those small unwanted changes.
+    #   It reduces camera noise and small light changes.
+    #   This helps avoid false motion detection.
 
 
     diff = cv2.absdiff(prev_gray, curr_gray)
 
-    # absdiff calculates absolute difference between two frames.
+    # Calculates difference between old and current frame.
     #
-    # Bright pixels:
-    #   changed areas
+    # Bright areas:
+    #   changed pixels
     #
-    # Dark pixels:
-    #   unchanged areas
+    # Dark areas:
+    #   unchanged pixels
 
 
     _, thresh = cv2.threshold(diff, 40, 255, cv2.THRESH_BINARY)
 
     # Threshold converts the difference image into black and white.
     #
-    # If pixel difference > 40:
+    # If difference > 40:
     #   pixel becomes white.
     #
-    # If pixel difference <= 40:
+    # If difference <= 40:
     #   pixel becomes black.
     #
-    # White regions represent movement.
+    # White pixels represent motion.
 
 
     thresh = cv2.dilate(thresh, None, iterations=2)
 
     # Dilation expands white regions.
     #
-    # Why dilation is needed:
+    # Why?
     #   Motion regions may appear broken into small parts.
-    #   Dilation joins nearby white pixels and makes motion areas clearer.
+    #   Dilation joins them and makes motion area clearer.
 
 
     # --------------------------------------------------------
     # 📦 Motion Area Detection using Contours
     # --------------------------------------------------------
     #
-    # Contours are boundaries of white regions.
+    # Contours are outlines/boundaries of white regions.
     #
     # Since white regions represent motion,
-    # contours help us find where movement happened.
+    # contours help us locate the moving area.
 
     contours, _ = cv2.findContours(
         thresh,
@@ -397,30 +572,25 @@ while True:
         cv2.CHAIN_APPROX_SIMPLE
     )
 
-    # cv2.RETR_EXTERNAL:
-    #   Detects only outer contours.
-    #
-    # cv2.CHAIN_APPROX_SIMPLE:
-    #   Compresses contour points to save memory.
-
 
     # --------------------------------------------------------
     # 🔵 Draw Largest Motion Area
     # --------------------------------------------------------
     #
-    # There may be many small motion regions due to noise.
-    # To keep output clean, we draw only the largest motion area.
+    # Instead of drawing many small boxes,
+    # we draw only the largest motion area.
+    #
+    # This makes the output clean and easy to understand.
 
     if contours:
         largest_contour = max(contours, key=cv2.contourArea)
 
-        # Ignore very small moving regions.
-        # This prevents tiny noise from getting motion boxes.
         if cv2.contourArea(largest_contour) > 3000:
+            # Ignore tiny movement/noise below 3000 area.
 
             x, y, w, h = cv2.boundingRect(largest_contour)
 
-            # Draw blue rectangle around largest motion area.
+            # Draw blue rectangle around motion area.
             cv2.rectangle(
                 frame,
                 (x, y),
@@ -429,7 +599,7 @@ while True:
                 2
             )
 
-            # Add label above motion rectangle.
+            # Add "Motion" label.
             cv2.putText(
                 frame,
                 "Motion",
@@ -449,67 +619,53 @@ while True:
 
     # countNonZero counts white pixels in threshold image.
     #
-    # More white pixels:
-    #   more motion
-    #
-    # Fewer white pixels:
-    #   less motion
-
+    # More white pixels = more motion.
+    # Fewer white pixels = less motion.
 
     motion_detected = motion_score > 7000
 
-    # If motion_score is above 7000,
-    # system treats it as significant motion.
+    # If motion score is greater than 7000,
+    # treat it as significant motion.
     #
     # Tuning:
-    #   Increase 7000 if false motion occurs.
-    #   Decrease 7000 if real motion is missed.
+    #   Increase 7000 if false alerts happen.
+    #   Decrease 7000 if real movement is missed.
 
 
     if motion_detected:
         last_motion_time = time.time()
 
-    # Whenever motion is detected,
-    # store current time.
+    # Store the time when motion was detected.
 
 
     recent_motion = (time.time() - last_motion_time) < motion_hold_time
 
-    # recent_motion keeps motion valid for a short time.
+    # Motion memory:
+    #   Keeps motion active for 2 seconds after detection.
     #
-    # Example:
-    #   motion_hold_time = 2
-    #
-    # Motion detected 1 second ago:
-    #   recent_motion = True
-    #
-    # Motion detected 3 seconds ago:
-    #   recent_motion = False
-
+    # This prevents flickering when motion briefly drops.
 
     print("Motion Score:", motion_score)
 
-    # Prints motion score in terminal.
-    # Useful for testing and calibration.
-
+    # Shows motion score in terminal for testing.
 
     prev_frame = frame.copy()
 
-    # Update previous frame.
-    # Current frame becomes previous frame for next loop cycle.
+    # Update previous frame for next loop.
+    # Current frame becomes previous frame in the next cycle.
 
 
     # --------------------------------------------------------
     # 🔍 STEP 5: Face Detection
     # --------------------------------------------------------
     #
-    # detectMultiScale scans grayscale image and returns detected faces.
+    # Face detection is done after motion processing.
     #
-    # Each detected face contains:
-    #   x → left position
-    #   y → top position
-    #   w → width
-    #   h → height
+    # detectMultiScale returns face boxes:
+    #   x = left position
+    #   y = top position
+    #   w = width
+    #   h = height
 
     faces = face_cascade.detectMultiScale(
         curr_gray,
@@ -519,19 +675,13 @@ while True:
     )
 
     # scaleFactor:
-    #   Controls how much image size changes during scanning.
+    #   Controls how the image is resized during face scanning.
     #
     # minNeighbors:
-    #   Controls detection strictness.
-    #
-    # Higher minNeighbors:
-    #   fewer false detections, but may miss faces.
-    #
-    # Lower minNeighbors:
-    #   detects more faces, but may create false positives.
+    #   Controls strictness of detection.
     #
     # minSize:
-    #   Ignores very small face-like regions.
+    #   Ignores very small face-like objects.
 
 
     # --------------------------------------------------------
@@ -548,9 +698,6 @@ while True:
         2
     )
 
-    # Shows number of faces detected.
-
-
     cv2.putText(
         frame,
         f"Motion: {recent_motion}",
@@ -561,25 +708,22 @@ while True:
         2
     )
 
-    # Shows whether recent motion is currently active.
-
 
     # --------------------------------------------------------
     # 🚦 STEP 6: Decide SAFE / ALERT Status
     # --------------------------------------------------------
-    #
-    # ALERT only when:
-    #   recent motion is true
-    #   AND
-    #   at least one face is detected
 
     status = "ALERT" if (recent_motion and len(faces) > 0) else "SAFE"
 
+    # ALERT only when:
+    #   recent motion is True
+    #   and at least one face is detected.
+
     color = (0, 0, 255) if status == "ALERT" else (0, 255, 0)
 
-    # OpenCV uses BGR color format:
-    #   (0, 0, 255) = Red
-    #   (0, 255, 0) = Green
+    # OpenCV uses BGR format:
+    #   Red   = (0, 0, 255)
+    #   Green = (0, 255, 0)
 
     cv2.putText(
         frame,
@@ -596,73 +740,50 @@ while True:
     # 🚨 STEP 7: State-Based Intruder Handling
     # --------------------------------------------------------
     #
-    # This controls:
+    # This part controls:
     #   - ESP32 alert ON/OFF
     #   - image saving
     #
     # State-based logic means:
-    #   ESP32 receives ON signal only once when intruder appears.
-    #   ESP32 receives OFF signal only once when intruder disappears.
-    #
-    # This avoids sending repeated commands many times per second.
+    #   Send ON signal only once when intruder appears.
+    #   Send OFF signal only once when intruder disappears.
 
     current_time = time.time()
 
     if recent_motion and len(faces) > 0:
 
-        # If intruder condition is true and system is currently OFF,
-        # send ON command to ESP32.
-
         if not system_active:
             print("Intruder Detected!")
 
             send_to_esp32(1)
-            # Sends byte '1' to ESP32.
-            # ESP32 should turn ON LED and buzzer.
+            # Sends ON command to ESP32.
 
             # winsound.Beep(1000, 500)
-            # Optional laptop beep.
-            # Currently commented because ESP32 buzzer is used.
+            # Optional laptop beep if needed.
 
             system_active = True
-            # Store that alert system is now ON.
 
-
-        # Save image only after cooldown time has passed.
+        # Save image only after cooldown.
         if current_time - last_capture_time > cooldown:
-
             filename = f"captures/intruder_{image_count}.jpg"
 
             cv2.imwrite(filename, frame)
-            # Saves current processed frame as image.
 
             image_count += 1
-            # Prepares next unique image filename.
-
             last_capture_time = current_time
-            # Updates last image capture time.
 
     else:
 
-        # If intruder condition is false and system is currently ON,
-        # turn ESP32 alert OFF.
-
         if system_active:
             send_to_esp32(0)
-            # Sends byte '0' to ESP32.
-            # ESP32 should turn OFF LED and buzzer.
+            # Sends OFF command to ESP32.
 
             system_active = False
-            # Store that alert system is now OFF.
 
 
     # --------------------------------------------------------
     # 🟩 STEP 8: Draw Face Bounding Boxes
     # --------------------------------------------------------
-    #
-    # For each detected face:
-    #   - write "Intruder"
-    #   - draw green box around face
 
     for (x, y, w, h) in faces:
 
@@ -688,13 +809,6 @@ while True:
     # --------------------------------------------------------
     # 🖥️ STEP 9: Display Final Output
     # --------------------------------------------------------
-    #
-    # The output window shows:
-    #   - face count
-    #   - SAFE / ALERT status
-    #   - motion state
-    #   - blue motion box
-    #   - green face box
 
     cv2.imshow("Face Detection", frame)
 
@@ -703,10 +817,7 @@ while True:
     # ⌨️ Exit Condition
     # --------------------------------------------------------
     #
-    # cv2.waitKey(1) checks for keyboard input.
-    #
-    # If q is pressed:
-    #   the program exits safely.
+    # Press q to quit.
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
@@ -716,24 +827,21 @@ while True:
 # 🧹 STEP 10: Cleanup and Safe Shutdown
 # ------------------------------------------------------------
 #
-# This section runs when the main loop ends.
+# This runs when program ends.
 #
-# Cleanup is important because:
-#   - webcam should be released
-#   - OpenCV windows should close properly
-#   - ESP32 alert should be turned OFF
-#   - serial connection should be closed safely
+# It safely:
+#   - releases webcam
+#   - closes display windows
+#   - turns ESP32 alert OFF
+#   - closes ESP32 serial connection
 
 cap.release()
-# Releases webcam access.
-
 cv2.destroyAllWindows()
-# Closes all OpenCV windows.
 
 send_to_esp32(0)
-# Sends safety OFF command to ESP32.
-# This ensures LED and buzzer are OFF when program ends.
 
 if esp32 is not None:
-    esp32.close()
-    # Closes ESP32 serial connection safely.
+    try:
+        esp32.close()
+    except Exception as e:
+        print("ESP32 close failed:", e)
