@@ -239,15 +239,15 @@ const char* password = "YOUR_WIFI_PASSWORD";
 
 ### Phase 2 Architecture
 
-![Phase 2 Architecture](images/phase_2_architecture.png)
+![Phase 2 Architecture](images/phase_2_images/phase_2_architecture.png)
 
 ### ESP32 LED and Buzzer Setup
 
-![ESP32 LED and Buzzer Setup](images/esp32_led_and_buzzer.jpeg)
+![ESP32 LED and Buzzer Setup](images/phase_2_images/esp32_led_and_buzzer.jpeg)
 
 ### Telegram Alert Received
 
-![Telegram Alert Received](images/telegram_alert_received.jpeg)
+![Telegram Alert Received](images/phase_2_images/telegram_alert_received.jpeg)
 
 ```markdown
 ## Future Scope - Phase 3
