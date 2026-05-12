@@ -289,6 +289,8 @@ Checked GitHub safety before upload
 
 ## Phase 2 Architecture
 
+![Phase 2 Architecture](images/Phase_2_Architecture.png)
+
 ## Current System Architecture
 
 ```text
