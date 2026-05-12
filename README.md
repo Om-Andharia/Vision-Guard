@@ -207,6 +207,34 @@ When the system becomes safe:
 - ESP32 turns OFF buzzer
 - System becomes ready for the next alert
 
+## Reliability Improvements
+
+| Issue | Improvement Added |
+| ----- | ----------------- |
+| ESP32 unplugged while Python runs | Added `try-except` handling inside `send_to_esp32()` |
+| Camera not detected | Added `cap.isOpened()` validation |
+| First camera frame failure | Added first-frame validation |
+| Camera blocked / too dark | Added brightness-based camera blocked detection |
+| Camera restored after blocking | Added recovery flag and motion baseline reset |
+| Telegram repeated alerts | Added 15-second cooldown |
+| GitHub credential safety | Replaced real credentials with placeholders |
+
+---
+
+## Security Note
+
+This project uses WiFi credentials, Telegram Bot Token, and Telegram Chat ID for IoT notification testing.
+
+For security reasons, real credentials are not uploaded to GitHub. Before running the code, replace the placeholder values with your own private credentials:
+
+```cpp
+const char* ssid = "YOUR_WIFI_NAME";
+const char* password = "YOUR_WIFI_PASSWORD";
+
+#define BOT_TOKEN "YOUR_BOT_TOKEN"
+#define CHAT_ID "YOUR_CHAT_ID"
+```
+
 ## ESP32 LED and Buzzer Setup
 
 ![ESP32 LED and Buzzer Setup](phase2/images/esp32_led_and_buzzer.jpeg)
