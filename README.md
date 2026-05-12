@@ -112,6 +112,10 @@ The LED pin was changed from **GPIO 2** to **GPIO 23** because GPIO 2 did not wo
 
 ---
 
+## ESP32 LED and Buzzer Setup
+
+![ESP32 LED and Buzzer Setup](images/esp32_led_and_buzzer.jpeg)
+
 ## Day 2 Summary – WiFi Foundation
 
 On **Day 2**, ESP32 WiFi connectivity was tested.
@@ -261,6 +265,10 @@ Result
 
 The full AI + ESP32 + Telegram IoT integration was completed successfully.
 
+### Telegram Alert Received
+
+![Telegram Alert Received](images/telegram_alert_received.jpeg)
+
 ## Day 6 Summary – Final Testing, Reliability, and Documentation
 
 On Day 6, the complete VisionGuard Phase 2 system was re-tested, improved, cleaned, and documented.
@@ -279,6 +287,7 @@ Added comments throughout the code
 Updated README documentation
 Checked GitHub safety before upload
 
+## Phase 2 Architecture
 
 ## Current System Architecture
 
