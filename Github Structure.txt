@@ -12,7 +12,15 @@ VisionGuard/
 │       └── command_mode.ino
 │
 ├── docs/
-│   ├── Documentation.docx
+│   ├── Phase_1_Day_1.pdf
+│   ├── Phase_1_Day_2.pdf
+│   ├── Phase_1_Day_3.pdf
+│   ├── Phase_1_Day_4.pdf
+│   ├── Phase_1_Day_4_Appendix_A.pdf
+│   ├── Phase_1_Day_5.pdf
+│   ├── Phase_1_Day_6.pdf
+│   ├── Phase_1_Day_7.pdf
+│   ├── Phase_1_Day_8.pdf
 │   ├── Phase_2_Roadmap.md
 │   ├── Project.txt
 │   └── Technical Report.docx
@@ -24,7 +32,6 @@ VisionGuard/
 │   │   ├── esp32_led_and_buzzer.jpeg
 │   │   └── telegram_alert_received.jpeg
 │   │
-│   ├── Real Time Simulation.mp4
 │   ├── TkinderCad_1.png
 │   ├── Top View_1.jpeg
 │   ├── Top View_2.jpeg
@@ -35,7 +42,6 @@ VisionGuard/
 ├── .gitignore.txt
 ├── Github Structure.txt
 ├── README.md
-├── README.md.txt
 ├── arduino_test.py
 ├── camera_test.py
 ├── face_detection.py
