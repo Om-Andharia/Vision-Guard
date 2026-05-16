@@ -381,28 +381,48 @@ This makes VisionGuard Phase 2 a complete AI, embedded systems, and IoT-based se
 
 ## Project Folder Structure
 
+## Project Folder Structure
+
 ```text
 VisionGuard-Phase-2-ESP32-IoT-Alert-System/
 │
 ├── docs/
+│   ├── Phase_2_Day_1.pdf
+│   ├── Phase_2_Day_2.pdf
+│   ├── Phase_2_Day_3.pdf
+│   ├── Phase_2_Day_4.pdf
+│   ├── Phase_2_Day_5.pdf
+│   ├── Phase_2_Day_6.pdf
 │   └── Tecnical_Report_Phase_2.docx
 │
 ├── esp32/
 │   ├── esp32_serial_telegram_alert/
+│   │   └── esp32_serial_telegram_alert.ino
+│   │
 │   ├── esp32_telegram_test/
+│   │   └── esp32_telegram_test.ino
+│   │
 │   ├── esp32_wifi_led_buzzer_status/
+│   │   └── esp32_wifi_led_buzzer_status.ino
+│   │
 │   ├── esp32_wifi_telegram_alert/
+│   │   └── esp32_wifi_telegram_alert.ino
+│   │
 │   ├── esp32_wifi_test/
+│   │   └── esp32_wifi_test.ino
+│   │
 │   ├── esp32_command_mode.ino
 │   ├── esp32_led_blink.ino
 │   └── esp32_test.ino
 │
 ├── images/
-│   └── Phase_2_Architecture.png
-│   └── VisionGuard_Bot_Demo.png
-│   └── esp32_led_and_buzzer.jpeg
-│   └── telegram_alert_received.jpeg
+│   ├── Phase_2_Architecture.png
+│   ├── VisionGuard_Bot_Demo.png
+│   ├── esp32_led_and_buzzer.jpeg
+│   ├── telegram_alert_received.jpeg
+│   └── terminal_output.png
 │
+├── .gitignore.txt
 ├── README.md
 ├── esp32_serial_test.py
 └── face_detection.py
